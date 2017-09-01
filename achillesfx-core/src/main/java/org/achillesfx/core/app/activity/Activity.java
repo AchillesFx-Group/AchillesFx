@@ -124,11 +124,12 @@ public abstract class Activity extends Context {
      * @return the node
      * @throws Exception the exception
      */
-    public Node findViewById(String name) throws Exception {
+    public Node findViewById(String name) {
         if (this.scene == null) {
-            throw new Exception("请注入界面");
+
+            return null;
         }
-        return this.scene.lookup(name);
+        return this.scene.lookup("#" + name);
     }
 
     public AchillesFxScene getScene() {
