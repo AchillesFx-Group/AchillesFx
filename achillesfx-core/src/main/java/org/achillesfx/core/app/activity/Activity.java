@@ -4,7 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import org.achillesfx.core.app.base.AchillesFxScene;
-import org.achillesfx.core.app.context.Context;
+import org.achillesfx.core.app.context.ActivityContext;
+import org.achillesfx.core.app.intent.Intent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,21 +19,34 @@ import java.util.ResourceBundle;
  * @create 2017 -08-19 下午12:14
  * @email spartajet.guo @gmail.com
  */
-public abstract class Activity extends Context {
+public abstract class Activity {
+    /**
+     * The Logger.
+     */
     private Logger logger = LoggerFactory.getLogger(Activity.class);
+    /**
+     * The Context.
+     */
+    private ActivityContext context;
     /**
      * The Scene.
      */
     private AchillesFxScene scene;
+    /**
+     * The Node.
+     */
     private Node node;
+
 
     /**
      * Instantiates a new Activity.
+     *
+     * @param context the context
      */
-    public Activity() {
+    public Activity(ActivityContext context) {
+        this.context = context;
         this.onCreate();
     }
-
 
     /**
      * On create.
@@ -86,11 +100,15 @@ public abstract class Activity extends Context {
      *
      * @param layoutName the layout path
      * @param bundle     the bundle
+     * @param stylePaths the style paths
      */
     public void setContentView(String layoutName, ResourceBundle bundle, String... stylePaths) {
         Parent parent = null;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(this.context.getResource(layoutName));
+        loader.setController(this);
         try {
-            parent = FXMLLoader.load(this.getResource(layoutName));
+            parent = loader.load();
         } catch (IOException e) {
             logger.error("achilles error", e);
             return;
@@ -132,7 +150,34 @@ public abstract class Activity extends Context {
         return this.scene.lookup("#" + name);
     }
 
+    public void startIntent(Intent intent) {
+        intent.start();
+    }
+
+    /**
+     * Gets scene.
+     *
+     * @return the scene
+     */
     public AchillesFxScene getScene() {
         return scene;
+    }
+
+    /**
+     * Gets context.
+     *
+     * @return the context
+     */
+    public ActivityContext getContext() {
+        return context;
+    }
+
+    /**
+     * Sets context.
+     *
+     * @param context the context
+     */
+    public void setContext(ActivityContext context) {
+        this.context = context;
     }
 }
