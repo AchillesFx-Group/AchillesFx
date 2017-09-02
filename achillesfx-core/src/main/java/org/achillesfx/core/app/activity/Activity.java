@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import org.achillesfx.core.app.base.AchillesFxScene;
 import org.achillesfx.core.app.context.ActivityContext;
+import org.achillesfx.core.app.intent.Intent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,6 +148,10 @@ public abstract class Activity {
             return null;
         }
         return this.scene.lookup("#" + name);
+    }
+
+    public void startIntent(Intent intent) {
+        intent.start();
     }
 
     /**
